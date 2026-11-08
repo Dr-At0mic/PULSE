@@ -1,0 +1,25 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+.pytest_cache/
+agent/lib/
+agent/config.yaml
+hub/config.yaml
+*.log
+
+# Android / Gradle
+android/.gradle/
+android/build/
+android/app/build/
+android/local.properties
+android/.idea/
+android/*.iml
+android/app/*.iml
+android/captures/
+*.keystore
+*.jks
+
+# Kotlin compiler daemon state
+android/.kotlin/

@@ -1,0 +1,40 @@
+[Unit]
+Description=PULSE telemetry agent
+After=network-online.target
+Wants=network-online.target
+# Never stop retrying. After a power cut Wi-Fi can take a while to come up and the
+# LAN address may not exist yet; systemd's default (5 starts / 10 s) would give up.
+StartLimitIntervalSec=0
+
+[Service]
+Type=simple
+# Unprivileged user: /proc, /sys (temps, disks) and psutil all work without root.
+# Processes owned by other users still show up; only their cmdlines are hidden.
+User=pulse-agent
+Group=pulse-agent
+WorkingDirectory=/opt/pulse-agent
+ExecStart=/opt/pulse-agent/venv/bin/python /opt/pulse-agent/agent.py -c /opt/pulse-agent/config.yaml
+Restart=always
+RestartSec=2
+Nice=10
+
+# Budget guard rails (normal use is ~30 MB and well under 1 % of one core).
+MemoryMax=60M
+CPUQuota=10%
+
+# Hardening: the agent only reads system stats and opens one outbound socket.
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=read-only
+PrivateTmp=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX AF_NETLINK
+RestrictNamespaces=true
+LockPersonality=true
+SystemCallArchitectures=native
+CapabilityBoundingSet=
+AmbientCapabilities=
+
+[Install]
+WantedBy=multi-user.target

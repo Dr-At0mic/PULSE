@@ -1,0 +1,18 @@
+# PULSE hub configuration. Copy to /opt/pulse-hub/config.yaml (mode 600).
+
+# Bind to the server's LAN address only (not 0.0.0.0) so the hub is never exposed
+# on other interfaces (Docker bridges, VPNs, a public NIC).
+host: 192.168.1.10
+port: 8765
+
+# Shared secrets. Generate with:  python3 -c "import secrets; print(secrets.token_urlsafe(24))"
+# Agents use agent_token, the tablet uses client_token. They may be the same value.
+agent_token: CHANGE-ME-agent-token
+client_token: CHANGE-ME-client-token
+
+# Seconds of silence before a device is shown as SIGNAL LOST.
+# 4.5 (not 5) so an unplugged machine is flagged within 5 s of the unplug,
+# because the last sample before the unplug is already ~0.5 s old on average.
+offline_after: 4.5
+
+log_level: INFO

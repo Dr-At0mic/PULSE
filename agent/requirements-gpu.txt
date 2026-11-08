@@ -1,0 +1,2 @@
+# Optional: in-process NVIDIA stats (cheaper than spawning nvidia-smi).
+nvidia-ml-py>=12

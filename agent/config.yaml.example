@@ -1,0 +1,33 @@
+# PULSE agent configuration.
+# Ubuntu: /opt/pulse-agent/config.yaml      Windows: D:\Applications\PulseAgent\config.yaml
+
+# The hub's LAN address. ws:// because traffic never leaves the LAN (see README, Security).
+hub_url: ws://192.168.1.10:8765
+
+# Must match agent_token in the hub's config.yaml.
+token: CHANGE-ME-agent-token
+
+# Short unique id (a-z, 0-9, - and _). It keys this machine on the dashboard,
+# so keep it stable. Defaults to the hostname.
+id: pc
+
+# What the tablet shows on the card (max 24 chars).
+name: BATTLESTATION
+
+# Neon accent for this device: #00F0FF cyan, #FF2EC4 magenta, #B6FF00 lime, #FFB000 amber.
+# The tablet can override it in Settings.
+accent: "#00F0FF"
+
+# NVIDIA GPU stats:  smi (default, one-shot nvidia-smi every 2 s, keeps the agent ~30 MB)
+#                    nvml (in-process, less CPU, but +23 MB RAM; needs requirements-gpu.txt)
+#                    "off"  (quote it: bare off is a YAML boolean, which also works)
+gpu: smi
+# Seconds between GPU samples with gpu: smi. Each sample spawns nvidia-smi (~25 ms CPU):
+# 2 s ~ 1.3 % of one core, 5 s ~ 0.5 %. Raise it if you want the agent even quieter.
+gpu_interval: 2
+
+# Windows only, optional: CPU temperature from LibreHardwareMonitor.
+# In LHM enable Options -> Remote Web Server -> Run (port 8085), then uncomment:
+# lhm_url: http://127.0.0.1:8085/data.json
+
+log_level: INFO

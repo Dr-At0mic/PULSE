@@ -1,0 +1,40 @@
+[Unit]
+Description=PULSE telemetry hub
+After=network-online.target
+Wants=network-online.target
+# Never stop retrying. After a power cut Wi-Fi can take a while to come up and the
+# LAN address may not exist yet; systemd's default (5 starts / 10 s) would give up.
+StartLimitIntervalSec=0
+
+[Service]
+Type=simple
+User=pulse
+Group=pulse
+WorkingDirectory=/opt/pulse-hub
+ExecStart=/opt/pulse-hub/venv/bin/python /opt/pulse-hub/hub.py -c /opt/pulse-hub/config.yaml
+Restart=always
+RestartSec=2
+
+# Resource guard rails: the hub is expected to sit around 20-25 MB.
+MemoryMax=80M
+CPUQuota=20%
+
+# Hardening: the hub needs nothing but its own directory and the network.
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+PrivateTmp=true
+PrivateDevices=true
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX
+RestrictNamespaces=true
+LockPersonality=true
+MemoryDenyWriteExecute=true
+SystemCallArchitectures=native
+CapabilityBoundingSet=
+AmbientCapabilities=
+
+[Install]
+WantedBy=multi-user.target
